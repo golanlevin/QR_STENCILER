@@ -116,8 +116,13 @@ boolean DO_ROUNDED_CORNERS         = true;   // Enables corner rounding and path
 boolean USE_BEZIER_NOT_ARCS        = false;  // Enables Bezier exporting instead of generating arc points. 
 boolean DO_ADVANCED_BRIDGING       = true;   // Chooses between advanced and simple bridging. 
 boolean DO_ALL_COMPUTED_BRIDGES    = false;  // Invalidates RANDOM_BRIDGE_CULLING_FACTOR
-boolean DO_OPEN_PDF_WHEN_DONE      = false;   // Open the stencil PDF in Acrobat when done? 
-
+boolean DO_OPEN_PDF_WHEN_DONE      = false;  // Open the stencil PDF in Acrobat when done? 
+// KDDW
+boolean ARTK_MODE                  = true;   // ARToolkit mode for thin border BCH markers
+int ARTK_MARKER_ID                 = 2;      // ARTK marker ID
+float PDF_STENCIL_SIZE_MM          = 50.0;   // Size of the stencil (mm) when outputed as a PDF
+int PDF_PAGE_WIDTH_MM              = 297;    // Width (mm) of the pdf page
+int PDF_PAGE_HEIGHT_MM             = 210;    // Height (mm) of the pdf page
 
 
 //=====================================================================
@@ -159,6 +164,7 @@ int blackAndWhiteImage[];
 int blackAndWhiteImageInverse[];
 int coloredLabeledImage[];
 int nPixels;
+int gridSize;
 
 final color white = color(255);
 final color black = color(0);
@@ -170,15 +176,26 @@ final int DIR_DOWN  = 1;
 final int DIR_LEFT  = 2; 
 final int DIR_RIGHT = 3;
 
+// KDDW
+final int ARTK_MARKER_SIZE = 200; // Size of the final marker image in pixels
+final int BCH_MARKER_SIZE = 10; // Size of the small markers in the "ARTK_AllBchThinMarkers.png" file
+final int ARTK_MARKER_SCALE = (int) ARTK_MARKER_SIZE / BCH_MARKER_SIZE;
+
 
 //===============================================================
 void setup() {
   bSetupPhase = true;
   QRStencilerInfo(); 
 
-  QRDefaultImageFilename = sketchPath + "/data/" + "QR_hello_world.png";
-  QRImageFilename = getUserSelectedQRCodeImageFilename(); // See FileLoading.pde
-  QR = loadImage (QRImageFilename);
+  if(ARTK_MODE) {
+    loadARTKMarker(ARTK_MARKER_ID);
+    
+  } else {
+    QRDefaultImageFilename = sketchPath + "/data/" + "QR_hello_world.png";
+    QRImageFilename = getUserSelectedQRCodeImageFilename(); // See FileLoading.pde
+    QR = loadImage (QRImageFilename);  
+  }
+  
   size (1000, 750, JAVA2D); 
 
   nPixels = QR.width * QR.height;
@@ -328,7 +345,14 @@ String drawAndExportPDF() {
   }
   QR_PdfFullFilename += ".pdf";
   QRStencilPDFFilename = QR_PdfFullFilename;
-  beginRecord(PDF, QR_PdfFullFilename);
+
+  // KDDW - Controls for the PDF page size
+  float mmToPt = 2.83464567;
+  int pdfWidth = ceil(PDF_PAGE_WIDTH_MM * mmToPt);
+  int pdfHeight = ceil(PDF_PAGE_HEIGHT_MM * mmToPt);
+  // Sizes are not exact, because createGraphics does not accept decimal values 
+  PGraphicsPDF pdf = (PGraphicsPDF) createGraphics(pdfWidth, pdfHeight, PDF, QR_PdfFullFilename);
+  beginRecord(pdf);
 
   // Generate the text written on the QR code stencil
   boolean bDrawTitleText = true;
@@ -346,9 +370,23 @@ String drawAndExportPDF() {
     text(QR_StencilText, 10, 10);
   }
 
+  // KDDW - Controls for the size of the stencil
+  float stencilSizePts = PDF_STENCIL_SIZE_MM * mmToPt;
+  int stencilAdjWidth;
+  if(ARTK_MODE) {
+    // Remove the border on each size + 1
+    stencilAdjWidth = QR.width - ARTK_MARKER_SCALE - ARTK_MARKER_SCALE - 1; 
+  } else {
+    float gridSizeFloat = gridSize;
+    float qrWidthFloat = QR.width;
+    stencilAdjWidth = QR.width - (int)((qrWidthFloat / gridSizeFloat) * 2.0) - 1;
+  }
+ //float gridSize = 
+  float stencilScale = stencilSizePts / stencilAdjWidth;
 
   pushMatrix();
-  translate((width - QR.width)/2.0, (height - QR.height)/2.0);  
+  scale(stencilScale, stencilScale);
+  translate((pdfWidth - stencilSizePts)/2.0, (pdfHeight - stencilSizePts)/2.0);  
 
   strokeWeight (PDF_LINE_THICKNESS); 
   stroke(0, 0, 0); 
@@ -370,3 +408,10 @@ String drawAndExportPDF() {
   return QR_PdfFullFilename;
 }
 
+// KDDW - Load an artk marker to be processed based on the marker ID
+void loadARTKMarker(int markerID) {
+  QR = createMarkerImage(markerID);
+  // Create a dummy file name for the PDF processing
+  QRImageFilename = sketchPath + "/data/ARTK_PDF/ARTK_" + zeroPad(markerID, 4) + ".png";
+  bCompleted = false;
+}

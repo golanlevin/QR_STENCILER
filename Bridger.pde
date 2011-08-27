@@ -125,7 +125,7 @@ void bridgeIslandsSimple (color[] inputBuffer, int inputW, int inputH) {
   // inputBuffer is an array of colors(i.e. ints), which 
   // are a 'pure' black-and-white version of the QR code. 
 
-  int gridSize = computeGridSize (inputBuffer, inputW, inputH); // see Utils.pde
+  gridSize = computeGridSize (inputBuffer, inputW, inputH); // see Utils.pde
 
   int ccLabelColors[] = CCL.getLabelColors();
   int nLabelColors = ccLabelColors.length;
@@ -176,7 +176,7 @@ void bridgeIslandsSimple (color[] inputBuffer, int inputW, int inputH) {
 //===============================================================
 void bridgeIslandsAdvanced (color[] inputBuffer, int inputW, int inputH) {
 
-  int gridSize = computeGridSize (inputBuffer, inputW, inputH); // see Utils.pde
+  gridSize = computeGridSize (inputBuffer, inputW, inputH); // see Utils.pde
   int ccLabelColors[] = CCL.getLabelColors();
   int nLabelColors = ccLabelColors.length;
   //while (nLabelColors > 2) {
