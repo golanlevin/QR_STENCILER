@@ -61,6 +61,10 @@ int computeGridSize (color[] qrImageBuffer, int qrImageW, int qrImageH) {
   // we know that the first thing is a black square which is 7 units wide.
   // use this information to automatically calculate the number of pixels per unit.  
   
+  if(ARTK_MODE) {
+    return ARTK_MARKER_SCALE;
+  }
+  
   int marginX = 0;
   int marginY = 0;  
   color searchColor = black;
@@ -154,3 +158,79 @@ void handleInverseStencil(){
     }
   }
 }
+// Author: "Karl D.D. Willis" <karl@karlddwillis.com>, 27 August, 2011
+//================================================================
+PImage createMarkerImage(int markerID) {
+  
+  // Create an image from a given BCH marker ID
+    
+  if(markerID > 4096 || markerID < 0) {
+    println("Marker ID out of range");
+    return null;
+  }
+
+  int BCH_MARKER_COUNT = 64;
+  int BCH_EDGE_SIZE = 3;
+  int BCH_GAP_SIZE = 2;
+  
+  // Index in the marker array
+  int ix = (int) (markerID % BCH_MARKER_COUNT);
+  int iy = (int) (markerID / BCH_MARKER_COUNT);
+
+  // Pixel location
+  int x = BCH_EDGE_SIZE + ix * BCH_MARKER_SIZE;
+  if(ix > 0) {
+    x += ix * BCH_GAP_SIZE;
+  }
+  int y = BCH_EDGE_SIZE + iy * BCH_MARKER_SIZE;
+  if(iy > 0) {
+    y += iy * BCH_GAP_SIZE;
+  }
+
+  PImage subImage = new PImage(ARTK_MARKER_SIZE, ARTK_MARKER_SIZE);
+  PImage markers = loadImage("data/ARTK_AllBchThinMarkers.png");
+  
+  // For each pixel in the 10x10 sub area of the markers png file
+  for (int i=0; i<BCH_MARKER_SIZE; i++) {
+    for (int j=0; j<BCH_MARKER_SIZE; j++) {
+			
+	int mainPixelPos = ((j+y) * markers.width + (i+x));
+			
+	int sx = i * ARTK_MARKER_SCALE;
+	int sy = j * ARTK_MARKER_SCALE;
+	int subPixelPos = (sy * ARTK_MARKER_SIZE + sx);			
+			
+	// Enlarge the 10x10 marker area to the display size
+	for (int k=0; k<ARTK_MARKER_SCALE; k++) {
+	  int krow = k * ARTK_MARKER_SIZE;
+	  for (int l=0; l<ARTK_MARKER_SCALE; l++) {
+	    int subDisplayPixelPos = krow + subPixelPos + l;
+	    subImage.pixels[subDisplayPixelPos] = markers.pixels[mainPixelPos];
+	  }
+	}
+    }
+  }
+	
+  subImage.updatePixels();
+  return subImage;
+}
+
+/** Zero Pad an int 
+ * 
+ * @param i     The number to pad
+ * @param len   The length required
+ * @return      The padded number
+ */
+public static String zeroPad(int i, int len) {
+    // converts integer to left-zero padded string, len chars long.
+    String s = Integer.toString(i);
+    if (s.length() > len) {
+        return s.substring(0, len);
+    // pad on left with zeros
+    } else if (s.length() < len) {
+        return "000000000000000000000000000".substring(0, len - s.length()) + s;
+    } else {
+        return s;
+    }
+}
+
