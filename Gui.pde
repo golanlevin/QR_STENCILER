@@ -87,7 +87,7 @@ public void recomputeStencil() {
 //===============================================================
 public void openPDFInAcrobat() {
   if (bComputedStencilPDF) {
-    open (QRStencilPDFFilename);
+    launch (QRStencilPDFFilename);
   }
 }
 
@@ -98,8 +98,8 @@ void controlEvent(ControlEvent theEvent) {
       recomputeStencil();
       // println("got an event from "+theEvent.group().name()+"\t");
       // checkbox uses arrayValue to store the state of individual checkbox-items:
-      for (int i=0;i<theEvent.group().arrayValue().length;i++) {
-        int val = (int)theEvent.group().arrayValue()[i];
+      for (int i=0;i<theEvent.group().getArrayValue().length;i++) {
+        int val = (int)theEvent.group().getArrayValue()[i];
 
         int n = 0;
         if (i== n++) {
@@ -131,4 +131,3 @@ void controlEvent(ControlEvent theEvent) {
     }
   }
 }
-

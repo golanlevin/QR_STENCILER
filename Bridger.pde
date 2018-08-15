@@ -1,3 +1,5 @@
+
+
 // Author: "Golan Levin" <golan@flong.com>, 01 August, 2011
 //================================================================
 class RowInfo {
@@ -14,13 +16,13 @@ void bridgeCorners (color[] bufferToProcess, int bufW, int bufH) {
 
   int N = CORNER_THICKENING;
   if (N > 0) {
-    
+
     color cornerColor = white;
-    if (DO_WHITE_PAINT_STENCIL){
+    if (DO_WHITE_PAINT_STENCIL) {
       cornerColor = black;
     }
-    
-    
+
+
     for (int y=N; y<(bufH-N); y++) {
       for (int x=N; x<(bufW-N); x++) {
 
@@ -73,8 +75,7 @@ void bridgeCorners (color[] bufferToProcess, int bufW, int bufH) {
                   bufferToProcess [indexSEc] = cornerColor;
                 }
               }
-            }
-            else {
+            } else {
 
               for (int j=0; j<i; j++) {
                 int Cxc = Cx - (N-i);
@@ -113,8 +114,7 @@ void  bridgeIslands (color[] inputBuffer, int inputW, int inputH) {
 
   if (DO_ADVANCED_BRIDGING) {
     bridgeIslandsAdvanced (inputBuffer, inputW, inputH);
-  } 
-  else {
+  } else {
     bridgeIslandsSimple (inputBuffer, inputW, inputH);
   }
 }
@@ -130,7 +130,7 @@ void bridgeIslandsSimple (color[] inputBuffer, int inputW, int inputH) {
   int ccLabelColors[] = CCL.getLabelColors();
   int nLabelColors = ccLabelColors.length;
   while (nLabelColors > 2) {
-    
+
     //---------------------
     // Find out where to build the bridge(s).
     // Get the first color other than black or white.
@@ -152,8 +152,7 @@ void bridgeIslandsSimple (color[] inputBuffer, int inputW, int inputH) {
         int bridgeWidth = getBridgeWidthFromGridSize (gridSize);
         int rightHandBridgeX = topRightXValue - (bridgeWidth-1);
         buildABridge (rightHandBridgeX, bridgeBottomY, gridSize, DIR_UP, gridSize, inputBuffer, inputW, inputH);
-      } 
-      else {
+      } else {
         int centerX = (topLeftXValue + topRightXValue)/2;
         buildABridge (centerX, bridgeBottomY, gridSize, DIR_UP, gridSize, inputBuffer, inputW, inputH);
       }
@@ -332,24 +331,19 @@ void bridgeIslandsAdvanced (color[] inputBuffer, int inputW, int inputH) {
     int N_BRIDGES_TO_MAKE = 4; // default.
     if (DO_ALL_COMPUTED_BRIDGES) {
       N_BRIDGES_TO_MAKE = piers.size();
-    } 
-    else {
+    } else {
       N_BRIDGES_TO_MAKE = min(piers.size(), max(MIN_BRIDGES_PER_ISLAND, nGridCellsInThatBlob));
     }
 
 
     for (int Br=0; Br < N_BRIDGES_TO_MAKE; Br++) {
 
-      // Select (at least 2 of) the shortest distances (that are not on the same side), and build bridges there. 
+      // Select (at least 2 of) the shortest distances (that are not on the same side), 
+      // and build bridges there. 
       // We can build more bridges (as appropriate) depending on the area of the blob:
       // extremely large blobs (whose areas contain many grid units) deserve more bridges. 
       // Sort the Piers by their length. 
-      Collections.sort (piers, new Comparator<Pier>() {
-        public int compare(Pier e0, Pier e1) {
-          return ((Integer)(e0.distance)).compareTo((Integer)(e1.distance));
-        }
-      }
-      ); 
+      Collections.sort (piers); 
       boolean bPrintPiers = false;
       if (bPrintPiers) {
         println("------------------"); 
@@ -456,8 +450,7 @@ void bridgeIslandsAdvanced (color[] inputBuffer, int inputW, int inputH) {
             }
           }
           // Now we have found the shortest pier, and from an underrepresented side, to boot!
-        } 
-        else if (countOfPiersWithTheShortestLength == 1) {
+        } else if (countOfPiersWithTheShortestLength == 1) {
           ; // Solo case. Just use shortestPier. We're good!
         }
 
@@ -496,8 +489,7 @@ void bridgeIslandsAdvanced (color[] inputBuffer, int inputW, int inputH) {
           case idH: 
             if (bearing == DIR_DOWN) {
               bridgeX -= (bridgeWidth-1);
-            } 
-            else if (bearing == DIR_RIGHT) {
+            } else if (bearing == DIR_RIGHT) {
               bridgeY -= (bridgeWidth-1);
             }
             break;
@@ -542,7 +534,7 @@ void bridgeIslandsAdvanced (color[] inputBuffer, int inputW, int inputH) {
 
 
 //===============================================================
-class Pier {    // A starting point for a possible bridge!
+class Pier implements Comparable {    // A starting point for a possible bridge!
 
   //-------------
   Pier (int id_, int index_, int bearing_, int distance_) {
@@ -578,6 +570,11 @@ class Pier {    // A starting point for a possible bridge!
   int index;    // the index (in the QR-image sized buffer) of the start point
   int bearing;  // which way the bridge would go from here
   int distance; // how long the bridge would need to be
+
+  int compareTo(Object other) {
+    int result =  ((Integer)(this.distance)).compareTo((Integer)(((Pier)other).distance));
+    return result;
+  }
 }
 
 
@@ -599,8 +596,7 @@ int getVDistanceToNearestNonBlackPixel (int startIndex, int inputW, int inputH, 
         testColor = coloredLabeledImage[testIndex];
       }
       distance = abs(y - (startIndex/inputW)) -1;
-    } 
-    else if (direction == DIR_DOWN) {
+    } else if (direction == DIR_DOWN) {
       y = y+1; 
       int testIndex = y*inputW + x; 
       color testColor = coloredLabeledImage[testIndex]; 
@@ -634,8 +630,7 @@ int getHDistanceToNearestNonBlackPixel (int startIndex, int inputW, int inputH, 
         testColor = coloredLabeledImage[testIndex];
       }
       distance = abs(x - (startIndex%inputW)) -1;
-    }
-    else if (direction == DIR_RIGHT) {
+    } else if (direction == DIR_RIGHT) {
       x = x+1; // to get started, on the pixel above
       int testIndex = y*inputW + x; 
       color testColor = coloredLabeledImage[testIndex]; 
@@ -668,9 +663,7 @@ void buildABridge (int bridgeX, int bridgeY, int gridSize, int direction, int di
         }
       }
     }
-  } 
-
-  else if (direction == DIR_DOWN) {
+  } else if (direction == DIR_DOWN) {
     // bridgeY is interpreted as the Y start value.
     int yEnd = bridgeY + distance + 1;
     for (int y=bridgeY; y<yEnd; y++) {
@@ -681,9 +674,7 @@ void buildABridge (int bridgeX, int bridgeY, int gridSize, int direction, int di
         }
       }
     }
-  }
-
-  else if (direction == DIR_LEFT) {
+  } else if (direction == DIR_LEFT) {
     int xStart = bridgeX;
     int xEnd   = bridgeX - distance - 1;
     for (int x=xStart; x >= xEnd; x--) {
@@ -694,9 +685,7 @@ void buildABridge (int bridgeX, int bridgeY, int gridSize, int direction, int di
         }
       }
     }
-  }
-
-  else if (direction == DIR_RIGHT) {
+  } else if (direction == DIR_RIGHT) {
     int xStart = bridgeX;
     int xEnd   = bridgeX + distance + 1; 
     for (int x=xStart; x<= xEnd; x++) {
@@ -779,4 +768,3 @@ int getAreaOfBlobWithACertainColor (color testColor, color[] colorBuffer, int in
 
   return pixelCount;
 }
-

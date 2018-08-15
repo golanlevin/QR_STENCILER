@@ -6,13 +6,13 @@ void QRStencilerInfo() {
   //           / _ \| _ \ / __|_   _| __| \| |/ __|_ _| |  | __| _ \
   //          | (_) |   / \__ \ | | | _|| .` | (__ | || |__| _||   /
   //           \__\_\_|_\ |___/ |_| |___|_|\_|\___|___|____|___|_|_\
-  //           By Golan Levin and Asa Foster III for FFFFF.AT, 2011 
+  //           By Golan Levin and Asa Foster III for FFFFF.AT, 2011-18 
   //
   println ();
   println (" ********************************************************");
   println (" *                                                      *"); 
   println (" *  QR_STENCILER                                        *");
-  println (" *  Version: 01 August, 2011                            *");  
+  println (" *  Version: 14 August, 2018                            *");  
   println (" *  http://fffff.at/qr-stenciler-and-qr-hobo-codes/     *");
   println (" *  By Golan Levin and Asa Foster III for FFFFF.AT      *"); 
   println (" *  Developed with Processing v.0198, a free, cross-    *"); 
@@ -24,12 +24,12 @@ void QRStencilerInfo() {
   println (" *  correct stencil PDF, suitable for laser-cutting.    *"); 
   println (" *                                                      *"); 
   println (" *  INSTRUCTIONS                                        *"); 
-  println (" *  >> QR_STENCILER has been tested in MacOSX 10.6.8.   *"); 
+  println (" *  >> QR_STENCILER has been tested in MacOSX 10.13.5.  *"); 
   println (" *  1. Make a QR code image which embeds a short text.  *");  
   println (" *     Try GoQR.me, Kaywa, or the Google Chart API.     *"); 
   println (" *  2. Download and install 'Processing' from           *"); 
   println (" *     http://www.processing.org/download               *");
-  println (" *     We used v.0198 but v.1.5.1 seems OK too.         *");
+  println (" *     This is known to work with version 3.4.          *");
   println (" *  3. Unzip 'QR_STENCILER.zip' to a folder.            *");
   println (" *  4. Put your QR code image in 'QR_STENCILER/data/'   *"); 
   println (" *  5. Launch Processing and open 'QR_STENCILER.pde'    *"); 
@@ -98,7 +98,9 @@ void QRStencilerInfo() {
 import processing.pdf.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Enumeration;
 import controlP5.*;
 
 
@@ -176,7 +178,7 @@ void setup() {
   bSetupPhase = true;
   QRStencilerInfo(); 
 
-  QRDefaultImageFilename = sketchPath + "/data/" + "QR_hello_world.png";
+  QRDefaultImageFilename = sketchPath() + "/data/" + "QR_hello_world.png";
   QRImageFilename = getUserSelectedQRCodeImageFilename(); // See FileLoading.pde
   QR = loadImage (QRImageFilename);
   size (1000, 750, JAVA2D); 
@@ -365,8 +367,7 @@ String drawAndExportPDF() {
 
   bComputedStencilPDF = true;
   if (DO_OPEN_PDF_WHEN_DONE) {
-    open (QR_PdfFullFilename);
+    launch (QR_PdfFullFilename);
   }
   return QR_PdfFullFilename;
 }
-

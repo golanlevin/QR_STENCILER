@@ -19,7 +19,7 @@ void loadHoboFileList(){
   currentHoboFileIndex = 0; 
   
   String aFilename;
-  String myPath = sketchPath + "/data/QR_hobo_codes/";
+  String myPath = sketchPath() + "/data/QR_hobo_codes/";
   File aFolder = new File(myPath);
   File[] listOfFiles = aFolder.listFiles(); 
 
@@ -50,7 +50,7 @@ String getNextHoboFile(){
 void generateHoboCodeHtml() {
   // generates a fragment of an HTML table to present all of the QR hobo codes. 
   String aFilename;
-  String myPath = sketchPath + "/data/QR_hobo_codes/";
+  String myPath = sketchPath() + "/data/QR_hobo_codes/";
   File aFolder = new File(myPath);
   File[] listOfFiles = aFolder.listFiles(); 
 
@@ -94,4 +94,3 @@ void generateHoboCodeHtml() {
     }
   }
 }
-

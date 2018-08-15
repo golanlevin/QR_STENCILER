@@ -12,7 +12,7 @@ String getUserSelectedQRCodeImageFilename () {
 
   try
   {
-    File dataDir = new File(sketchPath, "data/");
+    File dataDir = new File(sketchPath() + "/data/");
     if (!dataDir.exists()) {
       dataDir.mkdirs();
     }
@@ -162,4 +162,3 @@ class ImageFileFilter extends FileFilter {
     fullDescription = null;
   }
 }
-
