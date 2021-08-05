@@ -5,7 +5,9 @@ String getUserSelectedQRCodeImageFilename () {
   // These commands to open a file chooser are taken from: 
   // http://processing.org/discourse/yabb2/YaBB.pl?board=Syntax;action=display;num=1210972905
   
-  println("Please select a QR code image file."); 
+  println();
+  println("After a moment, you should see a file dialog window.");
+  println("Please select a QR-code image file."); 
   QRImageFilename = QRDefaultImageFilename;
   JFileChooser chooser = new JFileChooser();
   boolean bFailed = false;
@@ -43,10 +45,12 @@ String getUserSelectedQRCodeImageFilename () {
       } 
       else {
         bFailed = true;
+        println("The file you selected does not appear to be an image file.");
       }
     } 
     else {
       bFailed = true;
+      println ("An error occurred during file loading.");
     }
   }
   catch(Exception e) {

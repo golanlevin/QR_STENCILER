@@ -6,7 +6,8 @@
 
 
 QR_STENCILER                                        
-Version: 14 August, 2018                              
+Version: 4 August, 2021 
+https://github.com/golanlevin/QR_STENCILER                              
 http://fffff.at/qr-stenciler-and-qr-hobo-codes/     
 By Golan Levin and Asa Foster III for FFFFF.AT       
 Developed with Processing v.0198, a free, cross-     
@@ -19,12 +20,12 @@ image, from which it generates a topologically
 correct stencil PDF, suitable for laser-cutting.     
                                                      
 INSTRUCTIONS                                         
->> QR_STENCILER has been tested in MacOSX 10.13.5.    
+>> QR_STENCILER has been tested in MacOSX 10.15.7. 
 1. Make a QR code image which embeds a short text.    
    Try GoQR.me, Kaywa, or the Google Chart API.      
 2. Download and install 'Processing' from            
    http://www.processing.org/download               
-   We used Processing version 3.4.         
+   We used Processing versions 3.5.4 and 4.0a6.        
 3. Unzip 'QR_STENCILER.zip' to a folder.            
 4. Put your QR code image in 'QR_STENCILER/data/'    
 5. Launch Processing and open 'QR_STENCILER.pde'     
