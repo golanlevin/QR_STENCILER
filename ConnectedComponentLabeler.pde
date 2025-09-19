@@ -258,6 +258,3 @@ class ConnectedComponentLabeler {
     return labelColors;
   }
 }
-
-
-

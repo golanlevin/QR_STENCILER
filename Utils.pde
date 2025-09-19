@@ -112,7 +112,6 @@ int computeGridSize (color[] qrImageBuffer, int qrImageW, int qrImageH) {
 }
 
 
-
 //===============================================================
 void handleInverseStencil(){
   if (DO_WHITE_PAINT_STENCIL) {

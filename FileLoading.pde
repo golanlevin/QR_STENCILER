@@ -7,6 +7,7 @@ String getUserSelectedQRCodeImageFilename () {
   
   println();
   println("After a moment, you should see a file dialog window.");
+  println("You may need to run the software a few times.");
   println("Please select a QR-code image file."); 
   QRImageFilename = QRDefaultImageFilename;
   JFileChooser chooser = new JFileChooser();

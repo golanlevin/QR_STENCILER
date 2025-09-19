@@ -1,5 +1,3 @@
-
-
 // Author: "Golan Levin" <golan@flong.com>, 01 August, 2011
 //================================================================
 class RowInfo {
@@ -7,7 +5,6 @@ class RowInfo {
   int x1;
   int y;
 }
-
 
 
 //================================================================
@@ -106,6 +103,7 @@ void bridgeCorners (color[] bufferToProcess, int bufW, int bufH) {
   }
 }
 
+
 //===============================================================
 void  bridgeIslands (color[] inputBuffer, int inputW, int inputH) {
   // Dispatches the advanced or the simple bridging routine. 
@@ -169,7 +167,6 @@ void bridgeIslandsSimple (color[] inputBuffer, int inputW, int inputH) {
     nLabelColors = ccLabelColors.length;
   }
 }
-
 
 
 //===============================================================
@@ -644,7 +641,6 @@ int getHDistanceToNearestNonBlackPixel (int startIndex, int inputW, int inputH, 
   }
   return distance;
 }
-
 
 
 //===============================================================

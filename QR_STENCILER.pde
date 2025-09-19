@@ -1,4 +1,4 @@
-// Author: "Golan Levin" <golan@flong.com>
+// Author: "Golan Levin" <golanlevin@gmail.com>
 //=====================================================================
 void QRStencilerInfo() {
   if (DO_PRINT_INSTRUCTIONS) {
@@ -7,13 +7,13 @@ void QRStencilerInfo() {
     //           / _ \| _ \ / __|_   _| __| \| |/ __|_ _| |  | __| _ \
     //          | (_) |   / \__ \ | | | _|| .` | (__ | || |__| _||   /
     //           \__\_\_|_\ |___/ |_| |___|_|\_|\___|___|____|___|_|_\
-    //           By Golan Levin and Asa Foster III for FFFFF.AT, 2011-21
+    //           By Golan Levin and Asa Foster III for FFFFF.AT, 2011-2025
     //
     println ();
     println (" ********************************************************");
     println (" *                                                      *");
     println (" *  QR_STENCILER                                        *");
-    println (" *  Version: 4 August, 2021                             *");
+    println (" *  Version: 19 September, 2025                         *");
     println (" *  https://github.com/golanlevin/QR_STENCILER          *");
     println (" *  http://fffff.at/qr-stenciler-and-qr-hobo-codes/     *");
     println (" *  By Golan Levin and Asa Foster III for FFFFF.AT      *");
@@ -25,12 +25,14 @@ void QRStencilerInfo() {
     println (" *  image, from which it generates a topologically      *");
     println (" *  correct stencil PDF, suitable for laser-cutting.    *");
     println (" *                                                      *");
+    println (" *  COMPATIBILITY                                       *");
+    println (" *  >> QR_STENCILER has been tested in MacOSX 15.6.     *");
+    println (" *     and works with Processing v.3.5.4 and 4.4.7.     *");
+    println (" *                                                      *");
     println (" *  INSTRUCTIONS                                        *");
-    println (" *  >> QR_STENCILER has been tested in MacOSX 10.15.7.  *");
-    println (" *  1. Make a QR code image which embeds a short text.  *");
+    println (" *  1. Make a QR code image which embeds a brief text.  *");
     println (" *  2. Download and install 'Processing' from           *");
     println (" *     http://www.processing.org/download               *");
-    println (" *     This works with versions 3.5.4 and 4.0a6.        *");
     println (" *  3. Unzip 'QR_STENCILER.zip' to a folder.            *");
     println (" *  4. Put your QR code image in 'QR_STENCILER/data/'   *");
     println (" *  5. Launch Processing and open 'QR_STENCILER.pde'    *");
@@ -41,8 +43,8 @@ void QRStencilerInfo() {
     println (" *     stencil PDF in the 'data' folder.                *");
     println (" *  9. That PDF can now be opened in your favorite CAD  *");
     println (" *     software, for laser-cutting cardboard, etc.      *");
-    println (" *  10.After marking your stencil, test it with a QR    *");
-    println (" *     reader, such as TapMedia's free iPhone app.      *");
+    println (" *  10. After marking your stencil, test it with a QR   *");
+    println (" *     reader, such as your iPhone camera app.          *");
     println (" *                                                      *");
     println (" *  LICENSE                                             *");
     println (" *  QR_STENCILER shall be used for Good, not Evil.      *");
@@ -72,7 +74,7 @@ void QRStencilerInfo() {
     println (" *  or its use.                                         *");
     println (" *                                                      *");
     println (" *  ACKNOWLEDGEMENTS                                    *");
-    println (" *  QR_STENCILER was created by Golan Levin and         *");
+    println (" *  The QR_STENCILER was created by Golan Levin and     *");
     println (" *  Asa Foster III with support from the STUDIO for     *");
     println (" *  Creative Inquiry and the School of Art at           *");
     println (" *  Carnegie Mellon University. Thanks to Ben Fry,      *");
@@ -89,12 +91,13 @@ void QRStencilerInfo() {
     println (" *                                                      *");
     println (" *  CONTACT                                             *");
     println (" *  Inquiries about QR_STENCILER may be directed to:    *");
-    println (" *  Golan Levin <golan@flong.com>                       *");
+    println (" *  Golan Levin <golanlevin@gmail.com>                  *");
     println (" *                                                      *");
     println (" ********************************************************");
     println ();
   }
 }
+
 
 import processing.pdf.*;
 import javax.swing.*;
@@ -124,19 +127,11 @@ boolean DO_PRINT_INSTRUCTIONS      = false;  // Execute QRStencilerInfo()
 boolean B_VERBOSE                  = false;  // Print detailed algorithm status.
 
 //=====================================================================
-// For more information about generating your own QR codes, see:
-// http://code.google.com/apis/chart/image/docs/gallery/qr_codes.html
-// Note: You may obtain better results by experimenting with the QR
-// "error correction level" (L,M,Q,H) in the "chld" field.
-//
-// Our default QR code image ("hello world") is from:
-// https://chart.googleapis.com/chart?chs=540x540&cht=qr&chld=L|1&chl=hello%20world
 String QRDefaultImageFilename;
 String QRImageFilename;
 String QRStencilPDFFilename;
 boolean bComputedStencilPDF = false;
 PImage QR;
-
 
 ControlP5 controlP5;
 CheckBox  checkbox;
@@ -180,6 +175,7 @@ void setup() {
   QRStencilerInfo();
 
   size (1000, 750, JAVA2D);
+  pixelDensity(1); // Required after Processing 4.4.6+
   setupGUI(); // see Gui.pde
 
   QRDefaultImageFilename = sketchPath() + "/data/" + "QR_hello_world.png";
@@ -200,7 +196,6 @@ void setup() {
 }
 
 
-
 //===============================================================
 void draw() {
   if (bCompleted == false) {
@@ -209,6 +204,7 @@ void draw() {
   }
 }
 
+
 //===============================================================
 void keyPressed() {
   // Restart computation of a new stencil. Useful if you have some randomization enabled.
@@ -216,6 +212,7 @@ void keyPressed() {
     bCompleted = false;
   }
 }
+
 
 //===============================================================
 void doMainProcess() {
@@ -307,7 +304,6 @@ void drawPrettyResultsToScreen() {
   rect(0, 0, controlPanelWidth, height);
 
 
-
   boolean bCenterVersusScale = true;
   pushMatrix();
 
@@ -316,7 +312,6 @@ void drawPrettyResultsToScreen() {
   translate(controlPanelWidth, 0);
   translate(drawMargin, drawMargin);
   scale (scaleFactor, scaleFactor);
-
 
 
   stroke(255, 0, 128);

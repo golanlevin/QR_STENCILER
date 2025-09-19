@@ -1,6 +1,4 @@
-
-
-
+// Author: "Golan Levin" <golan@flong.com>, 01 August, 2011
 //===============================================================
 void setupGUI() {
   controlP5 = new ControlP5(this);
@@ -78,11 +76,11 @@ void setupGUI() {
 }
 
 
-
 //===============================================================
 public void recomputeStencil() {
   bCompleted = false;
 }
+
 
 //===============================================================
 public void openPDFInAcrobat() {
@@ -90,6 +88,7 @@ public void openPDFInAcrobat() {
     launch (QRStencilPDFFilename);
   }
 }
+
 
 //===============================================================
 void controlEvent(ControlEvent theEvent) {

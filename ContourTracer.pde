@@ -36,7 +36,6 @@ class ContourTracer {
   }
 
 
-
   //===============================================
   void drawAllChains() {
 
@@ -199,8 +198,6 @@ class ContourTracer {
   }
 
 
-
-
   //===============================================
   int compileLabelColors(int buffer[], int bufW, int bufH) {
 
@@ -234,6 +231,7 @@ class ContourTracer {
     return colorLabels.size();
   }
 
+
   //===============================================
   void findBlobStartPixel (int whichLabel, int[] buffer, int bufW, int bufH) {
 
@@ -261,6 +259,7 @@ class ContourTracer {
     if (y < 0 || y >= bufH) return false;
     return true;
   }
+
 
   //===============================================
   /*  Compute the chain code of the object beginning at pixel (i,j).
@@ -352,4 +351,3 @@ class ContourTracer {
 
   // end ContourTracer class
 }
-
